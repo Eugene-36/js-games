@@ -80,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cardsChoosen[0] === cardsChoosen[1]) {
       alert('You found a match');
 
-      cards[optionOneId].setAttribute('src', 'images/white.png');
-      cards[optionTwoId].setAttribute('src', 'images/white.png');
+      cards[optionOneId].setAttribute('src', 'images/black-cube-new.jpg');
+      cards[optionTwoId].setAttribute('src', 'images/black-cube-new.jpg');
       cardsWon.push(cardsChoosen);
     } else {
       cards[optionOneId].setAttribute('src', 'images/blank.png');
