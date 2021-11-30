@@ -74,8 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
   //check for matches
   function checkForMatch() {
     var cards = document.querySelectorAll('img');
+
     const optionOneId = cardChooseId[0];
     const optionTwoId = cardChooseId[1];
+    // console.log('optionOneId', optionOneId);
+    // console.log('optionTwoId', optionTwoId);
 
     if (cardsChoosen[0] === cardsChoosen[1]) {
       alert('You found a match');
