@@ -7,7 +7,8 @@
 .grid {
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
   align-content: center;
   width: 618px;
   height: 618px;
@@ -16,4 +17,16 @@
 .mole {
   background-image: url('mole.jpg');
   background-size: cover;
+}
+.container {
+  display: flex;
+
+  justify-content: center;
+}
+.container h2 {
+  margin-right: 20px;
+}
+.wrapper {
+  display: flex;
+  margin-left: 40px;
 }

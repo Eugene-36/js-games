@@ -5,6 +5,7 @@ const square = document.querySelectorAll('.square'),
 
 let result = 0;
 let currentTime = timeLeft.textContent;
+
 function randomSquare() {
   square.forEach((className) => {
     className.classList.remove('mole');
@@ -28,7 +29,7 @@ square.forEach((id) => {
 
 function moveMole() {
   let timerId = null;
-  //timerId = setInterval(randomSquare, 1000);
+  timerId = setInterval(randomSquare, 1000);
 }
 
 moveMole();
@@ -43,8 +44,4 @@ function countDown() {
   }
 }
 
-//let timerId = setInterval(countDown, 1000);
-
-//=====================================================================
-
- 
+let timerId = setInterval(countDown, 1000);
