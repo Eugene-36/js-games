@@ -19,14 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
     squares[appleIndex].classList.remove('apple');
     clearInterval(interval);
     score = 0;
-    //randomApple()
+    randomApple();
     direction = 1;
     scoreDisplay.innerText = score;
     intervalTime = 1000;
     currentSnake = [2, 1, 0];
     currentIndex = 0;
     currentSnake.forEach((index) => squares[index].classList.add('snake'));
-    interval = setInterval(moveOutcome, intervalTime);
+    interval = setInterval(moveOutcomes, intervalTime);
   }
 
   // function that deals with ALL the ove outcomes of the Snake
@@ -51,13 +51,22 @@ document.addEventListener('DOMContentLoaded', () => {
       squares[currentSnake[0]].classList.remove('apple');
       squares[tail].classList.add('snake');
       currentSnake.push(tail);
-      //randomApple()
+      randomApple();
       score++;
       scoreDisplay.textContent = score;
       clearInterval(interval);
       intervalTime = intervalTime * speed;
       interval = setInterval(moveOutcomes, intervalTime);
     }
+    squares[currentSnake[0]].classList.add('snake');
+  }
+
+  //generate new apple once apple is eaten
+  function randomApple() {
+    do {
+      appleIndex = Math.floor(Math.random() * squares.length);
+    } while (squares[appleIndex].classList.contains('snake')); //make sure apple doesn't appear on the snake
+    squares[appleIndex].classList.add('apple');
   }
 
   // assign functions to keycodes
@@ -69,11 +78,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (e.keyCode === 38) {
       direction = -width; // if we press the up arrow, the snake will go back ten divs , appearing to go up
     } else if (e.keyCode === 37) {
-      direction - 1; // if we press left, the snake will go left one div
+      direction = -1; // if we press left, the snake will go left one div
     } else if (e.keyCode === 40) {
       direction = +width; //if we press down, the snake head will instantly appear in the  ten divs from where you are now
     }
   }
 
   document.addEventListener('keyup', control);
+  startBtn.addEventListener('click', startGame);
 });
