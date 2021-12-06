@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const squares = document.querySelectorAll('.grid div'),
+  const grid = document.querySelector('.grid'),
     resultDisplay = document.querySelector('#result');
 
   let width = 15;
@@ -10,6 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
   let direction = 1;
   let invaderId;
   let goingRight = true;
+
+  for (let i = 0; i < 225; i++) {
+    const square = document.createElement('div');
+    grid.appendChild(square);
+  }
+
+  const squares = Array.from(document.querySelectorAll('.grid div'));
 
   //define the alien invaders
   const alienInvaders = [
@@ -107,8 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //decide a win
-    // console.log('alineInvadersTakenDown', alineInvadersTakenDown.length);
-    // console.log('alienInvaders', alienInvaders.length);
+
     if (alineInvadersTakenDown.length === alienInvaders.length - 1) {
       resultDisplay.innerHTML = 'YOU WIN';
       clearInterval(invaderId);
