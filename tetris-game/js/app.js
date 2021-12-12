@@ -4,12 +4,20 @@ document.addEventListener('DOMContentLoaded', () => {
   //   const GRID_HEIGHT = 20;
   //   const GRID_SIZE = GRID_WIDTH * GRID_HEIGHT;
 
+  const startBtn = document.querySelector('button');
   const grid = document.querySelector('.grid');
+  const scoreDisplay = document.querySelector('.score-display');
+  const linesDisplay = document.querySelector('.lines-display');
+  const displaySquares = document.querySelectorAll('.previous-grid div');
+  console.log(displaySquares);
   let squares = Array.from(grid.querySelectorAll('div'));
   const width = 10;
   const height = 20;
   let currentPosition = 4;
-
+  let currentIndex = 0;
+  let timerId;
+  let score = 0;
+  let lines = 0;
   //assign functions to keycodes
   function control(e) {
     if (e.key === 'ArrowRight') {
@@ -74,12 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let random = Math.floor(Math.random() * theTetrominoes.length);
   let currentRotation = 0;
   let current = theTetrominoes[random][currentRotation];
-
   //draw the shape
   function draw() {
-    current.forEach((index) =>
-      squares[currentPosition + index].classList.add('block')
-    );
+    current.forEach((index) => {
+      squares[currentPosition + index].classList.add('block');
+    });
   }
 
   //undraw the shape
@@ -140,5 +147,118 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     current = theTetrominoes[random][currentRotation];
     draw();
+  }
+
+  // show previous tetromino is displaySquares
+  const displayWidth = 4;
+  const displayIndex = 0;
+  let nextRandom = 0;
+
+  const smallTetrominoes = [
+    [1, displayWidth + 1, displayWidth * 2 + 1, 2] /* lTetromino */,
+    [0, displayWidth, displayWidth + 1, displayWidth * 2 + 1] /* zTetromino */,
+    [1, displayWidth, displayWidth + 1, displayWidth + 2] /* tTetromino */,
+    [0, 1, displayWidth, displayWidth + 1] /* oTetromino */,
+    [
+      1,
+      displayWidth + 1,
+      displayWidth * 2 + 1,
+      displayWidth * 3 + 1,
+    ] /* iTetromino */,
+  ];
+
+  function displayShape() {
+    displaySquares.forEach((squares) => {
+      squares.classList.remove('block');
+    });
+
+    smallTetrominoes[nextRandom].forEach((index) => {
+      displaySquares[displayIndex + index].classList.add('block');
+      console.log('smallTetrominoes', displaySquares[displayIndex + index]);
+    });
+  }
+
+  function freeze() {
+    if (
+      current.some(
+        (index) =>
+          squares[currentPosition + index + width].classList.contains(
+            'block3'
+          ) ||
+          squares[currentPosition + index + width].classList.contains('block2')
+      )
+    ) {
+      random = nextRandom;
+      nextRandom = Math.floor(Math.random() * theTetrominoes.length);
+
+      current.forEach((index) =>
+        squares[index + currentPosition].classList.add('block2')
+      );
+
+      current = theTetrominoes[random][currentRotation];
+      currentPosition = 4;
+      draw();
+      displayShape();
+      gameOver();
+      addScore();
+    }
+  }
+
+  startBtn.addEventListener('click', () => {
+    if (timerId) {
+      clearInterval(timerId);
+      timerId = null;
+    } else {
+      draw();
+      timerId = setInterval(moveDown, 1000);
+      nextRandom = Math.floor(Math.random() * theTetrominoes.length);
+      displayShape();
+    }
+  });
+
+  //game over
+  function gameOver() {
+    if (
+      current.some((index) =>
+        squares[currentPosition + index].classList.contains('block2')
+      )
+    ) {
+      scoreDisplay.innerHTML = 'end';
+      clearInterval(timerId);
+    }
+  }
+
+  //add score
+  function addScore() {
+    for (let currentIndex = 0; currentIndex < 199; currentIndex += width) {
+      const row = [
+        currentIndex,
+        currentIndex + 1,
+        currentIndex + 2,
+        currentIndex + 3,
+        currentIndex + 4,
+        currentIndex + 5,
+        currentIndex + 6,
+        currentIndex + 7,
+        currentIndex + 8,
+        currentIndex + 9,
+      ];
+
+      if (row.every((index) => squares[index].classList.contains('block2'))) {
+        score += 10;
+        lines += 1;
+        scoreDisplay.innerHTML = score;
+        linesDisplay.innerHTML = lines;
+        row.forEach((index) => {
+          squares[index].classList.remove('block2') ||
+            squares[index].classList.remove('block');
+        });
+
+        //splice Array
+        const squaresRemoved = squares.splice(currentIndex, width);
+        squares = squaresRemoved.concat(squares);
+        squares.forEach((cell) => grid.appendChild(cell));
+      }
+    }
   }
 });
